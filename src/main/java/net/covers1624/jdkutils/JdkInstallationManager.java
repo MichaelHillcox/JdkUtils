@@ -98,7 +98,7 @@ public class JdkInstallationManager {
             Path path = Paths.get(installation.path);
             if (path.isAbsolute()) {
                 LOGGER.info("Converting installation '{}' to relative paths.", installation.path);
-                installation.path = baseDir.relativize(path).toString();
+                installation.path = baseDir.toAbsolutePath().relativize(path).toString();
             }
             // TODO validate hashes?
         }
@@ -116,7 +116,7 @@ public class JdkInstallationManager {
                 if (!Files.isDirectory(path)) continue;
 
                 // Check if we have already know about whats inside this directory.
-                String rel = baseDir.relativize(path).toString();
+                String rel = baseDir.toAbsolutePath().relativize(path).toString();
                 // e.path == rel when the installation is old-format, baseDir/<folder>/bin
                 // e.path.startsWith(rel + /) when the installation is new-format. baseDir/<zip name>/<folder>/bin
                 if (ColUtils.anyMatch(installations, e -> e.path.equals(rel) || e.path.startsWith(rel + "/"))) continue;
